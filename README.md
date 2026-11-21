@@ -1,2 +1,3 @@
 # CardPile.Data
-Data for CardPile App
+
+Data repositiory for [CardPile](https://github.com/CardPile/CardPile/) App.
