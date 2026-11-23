@@ -1,0 +1,82 @@
+[
+    {
+        "set_code": "HOB",
+        "last_updated": "2026-08-30",
+        "digest": "14ea3dbe12ef82f25edc65b10b2a1d3e15951d0db41ab7311a35205acada0252"
+    },
+    {
+        "set_code": "TMT",
+        "last_updated": "2026-04-08",
+        "digest": "e28071cd7b7b2d228d43f3f3005fdbad8511e2dd0853423a0b0aa88f4dcad8bf"
+    },
+    {
+        "set_code": "ECL",
+        "last_updated": "2026-02-08",
+        "digest": "a1934a4341fcc71ec464ebcafeecd0c69fc8c8342b5f070a1c52d031a219e3d5"
+    },
+    {
+        "set_code": "TLA",
+        "last_updated": "2026-01-10",
+        "digest": "e1b2eea1adf87a6c12f302e215dd54952c58d463d7d3e5a5f7113707e0bd3573"
+    },
+    {
+        "set_code": "EOE",
+        "last_updated": "2025-09-02",
+        "digest": "2e6dda75528a3f849c8f69e77a2ea53b43552a4fd52ac8760188646e0eb891db"
+    },
+    {
+        "set_code": "FIN",
+        "last_updated": "2025-07-18",
+        "digest": "637fa947e5dec33f989809baeab2b63cc281cd2f7d24121ea61c5fd5864019e0"
+    },
+    {
+        "set_code": "TDM",
+        "last_updated": "2025-05-20",
+        "digest": "07bd64d7b417a74979da6d49664621502c1bb0955a79dd28cb05350dc83de59e"
+    },
+    {
+        "set_code": "DFT",
+        "last_updated": "2025-03-23",
+        "digest": "8091236520a9b71a80a7245218e6612b77234a62986b5e2f096548173ac565c7"
+    },
+    {
+        "set_code": "FDN",
+        "last_updated": "2024-12-18",
+        "digest": "ed674fd41c3eb0dfb2784b5190fa368010884ef74f5fd65978f57dd120a57c5d"
+    },
+    {
+        "set_code": "DSK",
+        "last_updated": "2024-10-30",
+        "digest": "431217a33777d426344c10952ffca000bf0903b0a302929c83fb1653568c8602"
+    },
+    {
+        "set_code": "BLB",
+        "last_updated": "2024-09-05",
+        "digest": "b7c0155706065bf954630f5e7cd8ebfdfebf341672c33dff425758e261507f0a"
+    },
+    {
+        "set_code": "MH3",
+        "last_updated": "2024-07-18",
+        "digest": "c18b539d9df2ab488cf82c4675b1406a314cc75b92014ee51ee10d2e8bc6b625"
+    },
+    {
+        "set_code": "OTJ",
+        "last_updated": "2024-05-31",
+        "digest": "c241f3bfeafc22263d3a4abd1ec8256e390724c93f67042eed876fe3f256477f"
+    },
+    {
+        "set_code": "MKM",
+        "last_updated": "2024-03-20",
+        "digest": "49da9c8ae61465b9be1ec5c7b14b535f464319491f778777599d13efd110bfb0"
+    },
+    {
+        "set_code": "SOS",
+        "last_updated": "2026-06-02",
+        "digest": "3e75ad883e79afefe00737bda9a9331ce9a585ffff8ee6464d7469e1e788cd6c"
+    },
+    {
+        "set_code": "MSH",
+        "last_updated": "2026-07-26",
+        "digest": "d0abba1e5009d8f018c51b13f548c363bd80e9110b56d3c6167020f2c258d837"
+    }
+]
