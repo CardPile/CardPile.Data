@@ -1,16 +1,16 @@
 import argparse
-import os
 import datetime
-import pathlib
+import functools
 import hashlib
+import json
+import os
+import pathlib
 import subprocess
 
 import numpy
 import polars
-import spells
-import functools
 import requests
-import json
+import spells
 from spells.cache import EventType
 
 import card_curve_noise
@@ -123,12 +123,19 @@ def filter_valid_datasets(public_datasets, manifest_datasets):
 
 
 def fetch_sets(output_dir, sets):
+  if len(sets) == 0:
+    return {}
+
   result = {}
   for set_code in sets:
     print(f"Fetching data for set {set_code}")
 
-    proces_result = subprocess.run(["spells", "add", set_code], capture_output=True, text=True, check=True)
-    print(proces_result.stdout)
+    try:
+      proces_result = subprocess.run(["spells", "add", set_code], capture_output=True, text=True, check=True)
+      print(proces_result.stdout)
+    except subprocess.CalledProcessError as e:
+      print(f"'spells add' command failed with exit code {e.returncode}")
+      print(f"Error message: {e.stderr}")
 
     frame = set_curves(set_code)
 
