@@ -145,6 +145,13 @@ def fetch_sets(output_dir, sets):
     with open(frame_path, "rb") as f:
       digest = hashlib.file_digest(f, "sha256").hexdigest()
 
+    try:
+      proces_result = subprocess.run(["spells", "remove", "--yes", set_code], capture_output=True, text=True, check=True)
+      print(proces_result.stdout)
+    except subprocess.CalledProcessError as e:
+      print(f"'spells remove' command failed with exit code {e.returncode}")
+      print(f"Error message: {e.stderr}")
+
     print(f"Data for set {set_code} ready with last updated {sets[set_code][0]} and digest {digest}")
 
     result[set_code] = (sets[set_code][0], digest)

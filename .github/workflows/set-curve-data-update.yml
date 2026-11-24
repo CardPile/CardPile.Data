@@ -33,8 +33,6 @@ jobs:
           sudo chmod 600 /mnt/swapfile
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
-          free -m
-          df -h / /mnt
 
       - name: Run set curve data update
         env:
@@ -51,45 +49,6 @@ jobs:
           sudo mkdir -p "$CG"
           echo 12G | sudo tee "$CG/memory.max" > /dev/null
           echo $$ | sudo tee "$CG/cgroup.procs" > /dev/null
-
-      - name: Add swap space
-        run: |
-          sudo swapoff -a
-          sudo rm -f /mnt/swapfile
-          sudo fallocate -l 16G /mnt/swapfile
-          sudo chmod 600 /mnt/swapfile
-          sudo mkswap /mnt/swapfile
-          sudo swapon /mnt/swapfile
-          free -m
-          df -h / /mnt
-
-      - name: Run set curve data update
-        env:
-          SPELLS_DATA_HOME: ${{ runner.temp }}/spells
-          PYTHONUNBUFFERED: "1"
-        run: |
-          mkdir -p "$SPELLS_DATA_HOME"
-
-          # Move this shell (and everything it starts) into its own cgroup with a 12 GB RAM cap.
-          # When the cap is hit, the kernel swaps this cgroup's memory out, and the runner keeps the rest of the RAM.
-          CG=/sys/fs/cgroup/set-curves
-          echo +memory | sudo tee /sys/fs/cgroup/cgroup.subtree_control > /dev/null
-          sudo mkdir -p "$CG"
-          echo 12G | sudo tee "$CG/memory.max" > /dev/null
-          echo $$ | sudo tee "$CG/cgroup.procs" > /dev/null
-
-          # Log the memory usage
-          (while true; do
-            echo "[MEM] $(date -u +%T) | $(free -m | awk '/Mem:/ {printf "Used: %sMB / %sMB (Avail: %sMB)", $3, $2, $7} /Swap:/ {printf " | Swap: %sMB", $3}') | cgroup: $(numfmt --to=iec < "$CG/memory.current")"
-            sleep 2
-          done) &
-          MONITOR_PID=$!
-
-          report() {
-            kill "$MONITOR_PID" 2>/dev/null || true
-            echo "[MEM] cgroup peak: $(numfmt --to=iec < "$CG/memory.peak") | $(grep oom_kill "$CG/memory.events")"
-          }
-          trap report EXIT
 
           cd src/python
           python prepare_set_curves.py ../../set_curve_data
