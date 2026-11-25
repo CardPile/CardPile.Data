@@ -177,6 +177,8 @@ def write_manifest(output_dir, sets):
     set_data['digest'] = digest
     data.append(set_data)
 
+  data.sort(key=lambda s: s['set_code'])
+
   file_path = output_dir / "manifest.json"
   with open(file_path, "w", encoding="utf-8") as file:
     json.dump(data, file, indent=4, ensure_ascii=False)
