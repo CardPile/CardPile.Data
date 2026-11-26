@@ -82,6 +82,9 @@ def with_pooled_anchor(set_df, set_code):
 
   pools = numpy.array(pools, dtype=object)
 
+  without_f = int((pools == None).sum())
+  assert without_f <= 0.05 * len(pools), f"{set_code}: {without_f} of {len(pools)} cards have no booster frequency, check card_frequencies against its play-booster sheets"
+
   anchor, pooled_in = mean3.copy(), numpy.full(len(pools), None, dtype=object)
   for pool in {p for p in pools if p is not None}:
     rows = numpy.flatnonzero(pools == pool)
@@ -120,11 +123,13 @@ def with_mean3_anchor(set_df, set_code):
   sums = set_df.select(*[r.sum().alias(f"s{i}") for i, r in enumerate(raw)]).row(0)
 
   if set_code in missing_p1p1_sets():
+    assert sums[0] < 0.01 * sums[1], f"{set_code}: in missing_p1p1_sets() but pack 1 has pick-1 rows, take it off the list"
     a = sums[1] / sums[2]
     assert 0.9 < a < 1.1, f"{set_code}: impossible pack 2 -> 3 attrition factor {a}"
     scales, usable = [1.0, a, a * a], [False, True, True]
   else:
     scales, usable = [1.0, sums[0] / sums[1], sums[0] / sums[2]], [True, True, True]
+    assert all(0.9 < s < 1.1 for s in scales[1:]), f"{set_code}: impossible pack scales {scales}, a set without pack-1 pick-1 rows belongs in missing_p1p1_sets()"
 
   pieces = [raw[i] * scales[i] for i in range(len(raw)) if usable[i]]
   mean = polars.sum_horizontal(pieces) / len(pieces)

@@ -8,9 +8,6 @@ BROKEN_17LANDS_CARDS = {
 }
 
 
-MIN_NUM_GIH = 450
-
-
 def filter_basic_lands(df):
   return df.filter(polars.col("name").is_in(["Plains", "Island", "Swamp", "Mountain", "Forest"]).not_())
 
@@ -52,7 +49,7 @@ def repair_broken_cards(df, set_code):
 
 
 def default_card_population_filter():
-  return polars.col("alsa").is_not_null() & (polars.col("num_gih") > MIN_NUM_GIH)
+  return polars.col("alsa").is_not_null()
 
 
 def max_packs():

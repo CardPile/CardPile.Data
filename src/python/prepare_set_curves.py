@@ -11,7 +11,9 @@ import numpy
 import polars
 import requests
 import spells
+from spells import cards, external
 from spells.cache import EventType
+from spells.enums import View
 
 import card_curve_noise
 import card_curves
@@ -23,7 +25,7 @@ KEY = ["name", "set_code", "is_bonus_sheet"]
 
 def card_stats(set_code):
   df = spells.summon(set_code,
-                     columns=[spells.ColName.SET_CODE, spells.ColName.IS_BONUS_SHEET, spells.ColName.ALSA, spells.ColName.NUM_GIH],
+                     columns=[spells.ColName.SET_CODE, spells.ColName.IS_BONUS_SHEET, spells.ColName.ALSA],
                      event_type=EventType.PREMIER)
   df = utils.repair_broken_cards(df, set_code)
   df = utils.filter_basic_lands(df)
@@ -116,10 +118,25 @@ def filter_valid_datasets(public_datasets, manifest_datasets):
   common_sets = public_datasets.keys() & manifest_datasets.keys()
   up_to_date_sets = {k: manifest_datasets[k] for k in common_sets if manifest_datasets[k][0] >= public_datasets[k]}
 
-  not_up_to_date_sets = {k: manifest_datasets[k] for k in common_sets if manifest_datasets[k][0] < public_datasets[k]}
+  not_up_to_date_sets = {k: (public_datasets[k], manifest_datasets[k][1]) for k in common_sets if manifest_datasets[k][0] < public_datasets[k]}
   new_sets = {k: (public_datasets[k], 0) for k in public_datasets if k not in manifest_datasets}
 
   return (new_sets | not_up_to_date_sets, up_to_date_sets, removed_sets)
+
+
+def download_set(set_code):
+  external.download_data_set(set_code, View.DRAFT, event_type=EventType.PREMIER)
+  cards.write_card_file(set_code, cards.names_from_parquet(set_code, EventType.PREMIER))
+
+
+def check_set_curves(frame, set_code):
+  packs, picks = range(1, utils.max_packs() + 1), range(1, utils.max_picks() + 1)
+  values = frame.drop(KEY).to_numpy().astype(float)
+  assert numpy.isfinite(values).all(), f"{set_code}: missing or infinite values"
+  assert (frame.select([f"P{p}P1" for p in packs]).to_numpy() > 0).all(), f"{set_code}: a card with no pick-1 copies"
+
+  shares = numpy.stack([frame.select([f"P{p}P{k}N" for k in picks]).to_numpy() for p in packs], axis=1)
+  assert (numpy.abs(shares[..., 0] - 1) < 1e-9).all() and (shares >= 0).all() and (numpy.diff(shares, axis=-1) <= 1e-9).all(), f"{set_code}: shares that do not start at 1 and fall"
 
 
 def fetch_sets(output_dir, sets):
@@ -130,14 +147,12 @@ def fetch_sets(output_dir, sets):
   for set_code in sets:
     print(f"Fetching data for set {set_code}")
 
-    try:
-      proces_result = subprocess.run(["spells", "add", set_code], capture_output=True, text=True, check=True)
-      print(proces_result.stdout)
-    except subprocess.CalledProcessError as e:
-      print(f"'spells add' command failed with exit code {e.returncode}")
-      print(f"Error message: {e.stderr}")
+    download_set(set_code)
 
+    print(f"Calculating curves for {set_code}")
     frame = set_curves(set_code)
+
+    check_set_curves(frame, set_code)
 
     frame_path = output_dir / f"{set_code}.parquet"
     frame.write_parquet(frame_path)
@@ -145,6 +160,7 @@ def fetch_sets(output_dir, sets):
     with open(frame_path, "rb") as f:
       digest = hashlib.file_digest(f, "sha256").hexdigest()
 
+    print(f"Removing data for set {set_code}")
     try:
       proces_result = subprocess.run(["spells", "remove", "--yes", set_code], capture_output=True, text=True, check=True)
       print(proces_result.stdout)
