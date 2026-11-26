@@ -86,3 +86,26 @@ def curve_sigmas(point, replicates):
     sd[degenerate] = 0.0
 
   return count_sd, ratio_sd, share_sd
+
+
+def decay_curve_signals(curves, qs):
+  curves = numpy.asarray(curves, dtype=float)
+  n = curves.shape[-1]
+  needle = curves[..., :1] * numpy.asarray(qs, dtype=float)
+  curves_reversed = curves[..., ::-1]
+  # searchsorted(side='right') on an ascending reversed curve = how many of its points are <= the needle
+  j = (curves_reversed[..., None, :] <= needle[..., :, None]).sum(axis=-1)
+  inner = numpy.clip(j, 1, n - 1)
+  upper = numpy.take_along_axis(curves_reversed, inner, axis=-1)
+  lower = numpy.take_along_axis(curves_reversed, inner - 1, axis=-1)
+  denom = upper - lower
+  frac = numpy.where(denom > 0, (needle - lower) / numpy.where(denom > 0, denom, 1.0), 0.0)
+  signals = n - (j + frac)
+  signals = numpy.where(j <= 0, n - needle / numpy.maximum(curves_reversed[..., :1], 1e-9), signals)
+  return numpy.where(j >= n, 0.0, signals)
+
+
+def signal_sigmas(replicates, qs):
+  """Calculate the bootstrap standard deviation (ddof=1) of every signal"""
+  return numpy.stack([decay_curve_signals(replicates[:, :, p, :], qs).std(axis=0, ddof=1)
+                      for p in range(replicates.shape[2])], axis=1)

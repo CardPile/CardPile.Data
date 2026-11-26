@@ -21,6 +21,7 @@ import utils
 
 OUTPUT_DIR = "set_curve_data"
 KEY = ["name", "set_code", "is_bonus_sheet"]
+SIGNAL_QS = [x / 100 for x in range(25, 76)]
 
 
 def card_stats(set_code):
@@ -48,11 +49,16 @@ def set_curves(set_code):
   point, replicates, _ = card_curve_noise.replicate_curves(pooled, every_card, set_code, EventType.PREMIER, keep=curves)
   _, _, share_sd = card_curve_noise.curve_sigmas(point, replicates)
 
+  signals = card_curve_noise.decay_curve_signals(cleaned, SIGNAL_QS)
+  signal_sd = card_curve_noise.signal_sigmas(replicates, SIGNAL_QS)
+
   packs, picks = range(1, utils.max_packs() + 1), range(1, utils.max_picks() + 1)
   return curves.select(KEY).with_columns(
     *[polars.Series(f"P{p}P1", cleaned[:, p - 1, 0]) for p in packs],
     *[polars.Series(f"P{p}P{k}N", shares[:, p - 1, k - 1]).fill_nan(None) for p in packs for k in picks],
     *[polars.Series(f"sigma_P{p}P{k}N", share_sd[:, p - 1, k - 1]) for p in packs for k in picks[1:]],
+    *[polars.Series(f"signal_p{p}_{round(100 * q)}", signals[:, p - 1, i]) for p in packs for i, q in enumerate(SIGNAL_QS)],
+    *[polars.Series(f"signal_p{p}_{round(100 * q)}_sigma", signal_sd[:, p - 1, i]) for p in packs for i, q in enumerate(SIGNAL_QS)],
   ).sort(KEY)
 
 
@@ -137,6 +143,9 @@ def check_set_curves(frame, set_code):
 
   shares = numpy.stack([frame.select([f"P{p}P{k}N" for k in picks]).to_numpy() for p in packs], axis=1)
   assert (numpy.abs(shares[..., 0] - 1) < 1e-9).all() and (shares >= 0).all() and (numpy.diff(shares, axis=-1) <= 1e-9).all(), f"{set_code}: shares that do not start at 1 and fall"
+
+  signals = numpy.stack([frame.select([f"signal_p{p}_{round(100 * q)}" for q in SIGNAL_QS]).to_numpy() for p in packs], axis=1)
+  assert ((signals >= 0) & (signals <= picks[-1])).all() and (numpy.diff(signals, axis=-1) <= 1e-9).all(), f"{set_code}: signals outside 0..{picks[-1]} or rising with q"
 
 
 def fetch_sets(output_dir, sets):
