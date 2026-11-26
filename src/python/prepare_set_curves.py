@@ -63,6 +63,13 @@ def set_curves(set_code):
 
 
 @functools.cache
+def get_set_etag(url):
+  response = requests.head(url, timeout=60)
+  response.raise_for_status()
+  return response.headers["ETag"].strip('"')
+
+
+@functools.cache
 def get_public_datasets():
     url = "https://www.17lands.com/api/public_datasets"
     cutoff = datetime.datetime(2024, 2, 9)
@@ -93,7 +100,7 @@ def get_public_datasets():
       if last_updated <= cutoff:
         continue
 
-      result[set_code] = last_updated
+      result[set_code] = get_set_etag(entry['urls']['draft'])
 
     return result
 
@@ -111,9 +118,9 @@ def load_manifest(data_dir):
   result = {}
   for entry in data:
     set_code = entry['set_code']
-    last_updated = datetime.datetime.strptime(entry['last_updated'], "%Y-%m-%d")
+    etag = entry['etag']
     digest = entry['digest']
-    result[set_code] = (last_updated, digest)
+    result[set_code] = (etag, digest)
 
   return result
 
@@ -122,9 +129,9 @@ def filter_valid_datasets(public_datasets, manifest_datasets):
   removed_sets = {k: manifest_datasets[k] for k in manifest_datasets if k not in public_datasets}
 
   common_sets = public_datasets.keys() & manifest_datasets.keys()
-  up_to_date_sets = {k: manifest_datasets[k] for k in common_sets if manifest_datasets[k][0] >= public_datasets[k]}
+  up_to_date_sets = {k: manifest_datasets[k] for k in common_sets if manifest_datasets[k][0] == public_datasets[k]}
 
-  not_up_to_date_sets = {k: (public_datasets[k], manifest_datasets[k][1]) for k in common_sets if manifest_datasets[k][0] < public_datasets[k]}
+  not_up_to_date_sets = {k: (public_datasets[k], manifest_datasets[k][1]) for k in common_sets if manifest_datasets[k][0] != public_datasets[k]}
   new_sets = {k: (public_datasets[k], 0) for k in public_datasets if k not in manifest_datasets}
 
   return (new_sets | not_up_to_date_sets, up_to_date_sets, removed_sets)
@@ -177,7 +184,7 @@ def fetch_sets(output_dir, sets):
       print(f"'spells remove' command failed with exit code {e.returncode}")
       print(f"Error message: {e.stderr}")
 
-    print(f"Data for set {set_code} ready with last updated {sets[set_code][0]} and digest {digest}")
+    print(f"Data for set {set_code} ready with ETag {sets[set_code][0]} and digest {digest}")
 
     result[set_code] = (sets[set_code][0], digest)
 
@@ -195,10 +202,10 @@ def remove_sets(output_dir, sets):
 def write_manifest(output_dir, sets):
   data = []
 
-  for (set_code, (last_updated, digest)) in sets.items():
+  for (set_code, (etag, digest)) in sets.items():
     set_data = {}
     set_data['set_code'] = set_code
-    set_data['last_updated'] = last_updated.strftime("%Y-%m-%d")
+    set_data['etag'] = etag
     set_data['digest'] = digest
     data.append(set_data)
 

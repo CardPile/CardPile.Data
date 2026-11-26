@@ -1,87 +1,87 @@
 [
     {
         "set_code": "BLB",
-        "last_updated": "2024-09-05",
-        "digest": "b7c0155706065bf954630f5e7cd8ebfdfebf341672c33dff425758e261507f0a"
+        "etag": "09ce7005bf2b52ce473eef46762aa269-25",
+        "digest": "07252e83ef2bda9293b14da7fc91f033ffb79c9bc7b93d9bc9a08376fc484de8"
     },
     {
         "set_code": "DFT",
-        "last_updated": "2025-03-23",
-        "digest": "8091236520a9b71a80a7245218e6612b77234a62986b5e2f096548173ac565c7"
+        "etag": "26901de9f4eeea3925cc71393279344d-25",
+        "digest": "9abb139257d98aaab75b75672d7d4af07cd96d64c25b719c15c4b95bc04b86f6"
     },
     {
         "set_code": "DSK",
-        "last_updated": "2024-10-30",
-        "digest": "431217a33777d426344c10952ffca000bf0903b0a302929c83fb1653568c8602"
+        "etag": "fbedc6da3a2370fff9185a7b9d94a439-30",
+        "digest": "1d5521d3e50d383d92b93dd05c71b2b419612fb2f98a926a4955c4f27214a485"
     },
     {
         "set_code": "ECL",
-        "last_updated": "2026-02-08",
-        "digest": "a1934a4341fcc71ec464ebcafeecd0c69fc8c8342b5f070a1c52d031a219e3d5"
+        "etag": "257b03c1698b5c137af1d0a188373c3c-16",
+        "digest": "f72ce34991e3eb80230ab8c623e78b4d027af62cd7d12c6742e4d3558657adf3"
     },
     {
         "set_code": "EOE",
-        "last_updated": "2025-09-02",
-        "digest": "2e6dda75528a3f849c8f69e77a2ea53b43552a4fd52ac8760188646e0eb891db"
+        "etag": "f1e4870059a656c11b175d4dc4e6a676-17",
+        "digest": "c2d3639cfb2e92a5777e089665ebf1dba713b4d80a73bea74d86fb0c85a1f24e"
     },
     {
         "set_code": "FDN",
-        "last_updated": "2024-12-18",
-        "digest": "ed674fd41c3eb0dfb2784b5190fa368010884ef74f5fd65978f57dd120a57c5d"
+        "etag": "7e39af8ed061e55023f701edde663bc9-23",
+        "digest": "8c4c3d42e9a4ad989e7bbf03aa2b31877ca026f63c6bec83b25e063142a8eee6"
     },
     {
         "set_code": "FIN",
-        "last_updated": "2025-07-18",
-        "digest": "637fa947e5dec33f989809baeab2b63cc281cd2f7d24121ea61c5fd5864019e0"
+        "etag": "5fd76048baa94e79541b3043e07330c2-26",
+        "digest": "ed61778efe99ba89c1256be20b6bc053708e8efeaaf8e9533022da790dda4ec6"
     },
     {
         "set_code": "FRA",
-        "last_updated": "2026-10-17",
-        "digest": "c388c8045f36d04f6a87caeb4d09916812437279ca88048322ff9a857c5a96aa"
+        "etag": "25d679d015c75f2ff4ca9e8ca45dea7e-15",
+        "digest": "e9675f9abfc0222f7afe6d3d7b1e6d1165f93b7cc1cf19aae1c0d3749279a031"
     },
     {
         "set_code": "HOB",
-        "last_updated": "2026-08-30",
-        "digest": "14ea3dbe12ef82f25edc65b10b2a1d3e15951d0db41ab7311a35205acada0252"
+        "etag": "9ad61ad97cad3f8bc11b8c3239094e6a-9",
+        "digest": "d1a44ca48b595d3ba058c07e97879b6e9c637c21c350e6ac998891654812ac51"
     },
     {
         "set_code": "MH3",
-        "last_updated": "2024-07-18",
-        "digest": "c18b539d9df2ab488cf82c4675b1406a314cc75b92014ee51ee10d2e8bc6b625"
+        "etag": "4ae0b61c97f567c578bcfdaa738059a2-23",
+        "digest": "3d7c1bd3792acf4326bd8d2e0f24b47bf45ee025180e292f121fabf0e554c380"
     },
     {
         "set_code": "MKM",
-        "last_updated": "2024-03-20",
-        "digest": "49da9c8ae61465b9be1ec5c7b14b535f464319491f778777599d13efd110bfb0"
+        "etag": "5b730b02b635ae3c6f6b7bfabf4d2fa7-27",
+        "digest": "4ffd54211c83affb21a6c46ab63256bfc5e434a89217a3c9e2c284566443511b"
     },
     {
         "set_code": "MSH",
-        "last_updated": "2026-07-26",
-        "digest": "d0abba1e5009d8f018c51b13f548c363bd80e9110b56d3c6167020f2c258d837"
+        "etag": "9488e698a1b90a8b80822bd3f5bfe7c3-13",
+        "digest": "55e3cc85266ff0b76b0e57fbd1874a0b8a1a26b01431c9c1ae665f6b7b4f1578"
     },
     {
         "set_code": "OTJ",
-        "last_updated": "2024-05-31",
-        "digest": "c241f3bfeafc22263d3a4abd1ec8256e390724c93f67042eed876fe3f256477f"
+        "etag": "82d2e8dca8f32f5cf53d24b81ab1cb7e-37",
+        "digest": "bf4ddb6ea7b55b554c22eff92a191d0786119871cfd31f75755d23e824727c48"
     },
     {
         "set_code": "SOS",
-        "last_updated": "2026-06-02",
-        "digest": "3e75ad883e79afefe00737bda9a9331ce9a585ffff8ee6464d7469e1e788cd6c"
+        "etag": "69891b4e4735070327c68bab2b461274-20",
+        "digest": "403018d75189a5f458e840a5bfba1e029e870260f718ff4263da2856914bbebb"
     },
     {
         "set_code": "TDM",
-        "last_updated": "2025-05-20",
-        "digest": "07bd64d7b417a74979da6d49664621502c1bb0955a79dd28cb05350dc83de59e"
+        "etag": "0d683718158cd14fb2e71cd19568c3f2-18",
+        "digest": "769ea07faca2ac82e4af3ea60e2dae6465ad7a9f682ffe2ea33ae600cf3cfbaf"
     },
     {
         "set_code": "TLA",
-        "last_updated": "2026-01-10",
-        "digest": "e1b2eea1adf87a6c12f302e215dd54952c58d463d7d3e5a5f7113707e0bd3573"
+        "etag": "9410ca65896b7e2b3d7453e72be65062-19",
+        "digest": "97d419c42b92d9aa97c1bd2f79c60ddcd44b361541d4ce8e9c9b3df0a10c0dea"
     },
     {
         "set_code": "TMT",
-        "last_updated": "2026-04-08",
-        "digest": "e28071cd7b7b2d228d43f3f3005fdbad8511e2dd0853423a0b0aa88f4dcad8bf"
+        "etag": "f235860efeba2772f55217fbdaab05bf-6",
+        "digest": "6c97a0dc2843887d3f44283ab71726f98f92aa7bcb7afa3c910f874b1a90dbc3"
     }
 ]
